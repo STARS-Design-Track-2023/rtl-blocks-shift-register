@@ -195,4 +195,4 @@ view: $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES))
 .PHONY: all help clean print_vars
 .PHONY: $(SRC) $(MAP)
 .PHONY: $(SIM_SOURCE) $(SIM_MAPPED)
-.PHONY: lint verify
+.PHONY: lint verify view

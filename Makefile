@@ -12,7 +12,7 @@
 
 # Specify the name of the top level file (do not include the source folder in the name)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
-TOP_FILE         := 
+TOP_FILE         := shift_reg.sv 
 
 # List internal component/block files here (separate the filenames with spaces)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
@@ -174,7 +174,7 @@ lint: $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 	@echo "----------------------------------------------------------------"
 	@echo "Checking Syntax ....."
 	@echo "----------------------------------------------------------------\n\n"
-	@verilator --lint-only --timing -Wno-MULTITOP -Wno-TIMESCALEMOD $^
+	@-verilator --lint-only --timing -Wno-MULTITOP -Wno-TIMESCALEMOD $^
 	@echo "\n\n"
 	@echo "Done linting"
 

@@ -12,7 +12,7 @@
 
 # Specify the name of the top level file (do not include the source folder in the name)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
-TOP_FILE         := shift_reg.sv 
+TOP_FILE         := 
 
 # List internal component/block files here (separate the filenames with spaces)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
@@ -41,13 +41,13 @@ DUMP             := dump
 
 # Compiler
 VC               := iverilog
-CFLAGS           := -g2012 -v
+CFLAGS           := -g2012 -gspecify -v
 
 # Design Compiler
 DC               := yosys
 
 # Cell libraries
-ICETIME          := timing/cells_map_timing.v timing/cells_sim_timing.v
+GATE_LIB         := gscl45nm
 
 ##############################################################################
 # RULES
@@ -111,7 +111,7 @@ print_vars:
 	@echo "Testbench: $(TB)"
 	@echo "Top level module: $(TOP_MODULE)"
 	@echo "Testbench module: $(TB_MODULE)"
-	@echo "Gate Library: '$(ICETIME)'"
+	@echo "Gate Library: '$(GATE_LIB)'"
 	@echo "Source work library: '$(SRC)'"
 	@echo "Mapped work library: '$(MAP)'"
 
@@ -132,14 +132,14 @@ $(SRC): $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 
 $(MAP): $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 	@echo "----------------------------------------------------------------"
-	@echo "Creating executable for mapped compilation ....."
+	@echo "Synthesizing and Compiling with gscl45nm process ....."
 	@echo "----------------------------------------------------------------\n\n"
 	@mkdir -p ./$(MAP)
 	@mkdir -p ./$(BUILD)
 	@touch -c $(TOP).log
-	@$(DC) -p 'read_verilog -sv -noblackbox $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES)); synth_ice40 -top $(TOP_MODULE); write_verilog $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
+	@$(DC) -p 'read_verilog -sv -noblackbox $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES)); hierarchy -check -top $(TOP_MODULE); proc; opt; fsm; opt; memory; opt; techmap; opt; dfflibmap -liberty $(GATE_LIB)/$(GATE_LIB).lib; abc -liberty $(GATE_LIB)/$(GATE_LIB).lib; clean; write_verilog $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
 	@echo "Synthesis complete .....\n\n"
-	@$(VC) $(CFLAGS) -o $(BUILD)/$(SIM_MAPPED).vvp $@/$(TOP_MODULE).v $(SRC)/$(TB) $(ICETIME)
+	@$(VC) $(CFLAGS) -o $(BUILD)/$(SIM_MAPPED).vvp $@/$(TOP_MODULE).v $(SRC)/$(TB) $(GATE_LIB)/$(GATE_LIB).v
 	@echo "\n\n"
 	@echo "Compilation complete\n\n"
 
@@ -185,7 +185,7 @@ view: $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES))
 	@echo "----------------------------------------------------------------"
 	@echo "Making Gate Level Schematic ....."
 	@echo "----------------------------------------------------------------\n\n"
-	@$(DC) -p 'read_verilog -sv $^; hierarchy -check -top $(TOP_MODULE); proc; opt; fsm; opt; memory; opt; techmap; opt; show' > log_mapping.show
+	@$(DC) -p 'read_verilog -sv $^; hierarchy -check -top $(TOP_MODULE); proc; opt; fsm; opt; memory; opt; techmap; opt; show' > log_mapping.log
 	@echo "Done creating Schematic"	
 
 ###########################################################################################

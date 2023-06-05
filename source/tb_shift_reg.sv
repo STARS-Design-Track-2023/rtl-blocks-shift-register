@@ -1,9 +1,9 @@
-`timescale 1ms/1ps
+`timescale 1ns/10ps
 
 module tb_shift_reg ();
 
   localparam CLK_PERIOD        = 2.5;
-  localparam PROPAGATION_DELAY = 0.000006; 
+  localparam PROPAGATION_DELAY = 0.5; 
 
   localparam  SR_SIZE_BITS       = 8;
   localparam  SR_MAX_BIT         = SR_SIZE_BITS - 1;

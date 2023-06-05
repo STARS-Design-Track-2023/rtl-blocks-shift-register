@@ -69,7 +69,7 @@ help:
 	@echo "Administrative targets:"
 	@echo "  all           - compiles the source version of a full"
 	@echo "                  design including its top level test bench"
-	@echo "dir             - Creates required directories."
+	@echo "  dir           - Creates required directories."
 	@echo "  help          - makefile targets explanation"
 	@echo "  clean         - removes the temporary files"
 	@echo "  print_vars    - prints the contents of the variables"

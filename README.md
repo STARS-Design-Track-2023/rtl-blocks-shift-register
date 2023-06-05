@@ -36,6 +36,7 @@ This design implements a parallel to parallel or serial to parallel (MSB or LSB)
 6. Have both source and mapped versions of your code working.
 ## Expected Results
 Use the following signal dump to debug your HDL.
+
 ![GTKwave Simulation!](/img/sig_dump.png "GTKwave simulation")
 
  

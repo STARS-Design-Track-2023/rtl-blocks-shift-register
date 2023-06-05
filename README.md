@@ -1,7 +1,7 @@
 # Shift Register
 
 ## Installation
-To clone the repository go to a safe directory and in the terminal type the following <br>```git clone git@github.com:STARS-Design-Track-2023/rtl-blocks-shift_register.git```
+To clone the repository go to a safe directory and in the terminal type the following <br> ```git clone git@github.com:STARS-Design-Track-2023/rtl-blocks-shift_register.git```
 
 ## Source Files
 - shift_reg.sv : This is where the design code should be located.

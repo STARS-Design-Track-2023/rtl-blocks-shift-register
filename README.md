@@ -5,7 +5,7 @@ To clone the repository go to a safe directory and in the terminal type the foll
 
 ## Source Files
 - shift_reg.sv : This is where the design code should be located.
-- tb_shift_reg.sv : This is the test bench used to test your design. Credit: Xinyu Wang
+- tb_shift_reg.sv : This is the test bench used to test your design. Credit: Xinyu Yang
 
 ## Specifations
 > ### Module Name 

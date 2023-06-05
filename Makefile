@@ -69,6 +69,7 @@ help:
 	@echo "Administrative targets:"
 	@echo "  all           - compiles the source version of a full"
 	@echo "                  design including its top level test bench"
+	@echo "dir             - Creates required directories."
 	@echo "  help          - makefile targets explanation"
 	@echo "  clean         - removes the temporary files"
 	@echo "  print_vars    - prints the contents of the variables"
@@ -98,9 +99,9 @@ help:
 all: $(SIM_SOURCE)
 
 dir:
-	@echo mkdir -p ./docs
-	@echo mkdir -p ./$(MAP)
-	@echo mkdir -p ./$(BUILD)
+	@mkdir -p ./docs
+	@mkdir -p ./$(MAP)
+	@mkdir -p ./$(BUILD)
 
 clean:
 	@echo "Removing temporary files, build files and log files"

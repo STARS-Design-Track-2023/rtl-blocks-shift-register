@@ -97,6 +97,11 @@ help:
 
 all: $(SIM_SOURCE)
 
+dir:
+	@echo mkdir -p ./docs
+	@echo mkdir -p ./$(MAP)
+	@echo mkdir -p ./$(BUILD)
+
 clean:
 	@echo "Removing temporary files, build files and log files"
 	@rm -rf $(BUILD)/* 

@@ -12,7 +12,7 @@
 
 # Specify the name of the top level file (do not include the source folder in the name)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
-TOP_FILE         := 
+TOP_FILE         := shift_reg.sv
 
 # List internal component/block files here (separate the filenames with spaces)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
@@ -41,7 +41,7 @@ DUMP             := dump
 
 # Compiler
 VC               := iverilog
-CFLAGS           := -g2012 -gspecify -v
+CFLAGS           := -g2012 -gspecify -Tmax -v
 
 # Design Compiler
 DC               := yosys
@@ -185,7 +185,7 @@ lint: $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 	@echo "Done linting"
 
 verify: $(BUILD)/$(DUMP).vcd 
-	@open -a gtkwave $^
+	@gtkwave $^
 
 view: $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES))
 	@echo "----------------------------------------------------------------"

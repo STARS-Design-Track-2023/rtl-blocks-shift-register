@@ -158,8 +158,12 @@ $(MAP): $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 	@mkdir -p ./$(BUILD)
 	@touch -c $(TOP).log
 	@$(DC) -d -t -p 'read_verilog -sv -noblackbox $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES)); \
-		hierarchy -check -top $(TOP_MODULE); proc; opt; fsm; opt; memory; opt; techmap; opt; dfflibmap -liberty $(GATE_LIB)/$(GATE_LIB).lib; \
-		abc -liberty $(GATE_LIB)/$(GATE_LIB).lib; clean; write_verilog $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
+		synth -top $(TOP_MODULE); \
+		opt_clean -purge \
+		dfflibmap -liberty $(GATE_LIB)/$(GATE_LIB).lib; \
+		abc -liberty $(GATE_LIB)/$(GATE_LIB).lib; \
+		clean; \
+		write_verilog $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
 	@echo "Synthesis complete .....\n\n"
 	@$(VC) $(CFLAGS) -o $(BUILD)/$(SIM_MAPPED).vvp $@/$(TOP_MODULE).v $(SRC)/$(TB) $(GATE_LIB)/$(GATE_LIB).v
 	@echo "\n\n"

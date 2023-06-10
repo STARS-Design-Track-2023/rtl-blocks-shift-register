@@ -157,13 +157,13 @@ $(MAP): $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 	@mkdir -p ./$(MAP)
 	@mkdir -p ./$(BUILD)
 	@touch -c $(TOP).log
-	@$(DC) -d -t -p 'read_verilog -sv -noblackbox $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES)); \
+	@$(DC) -d -p 'read_verilog -sv -noblackbox $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES)); \
 		synth -top $(TOP_MODULE); \
 		opt_clean -purge \
 		dfflibmap -liberty $(GATE_LIB)/$(GATE_LIB).lib; \
 		abc -liberty $(GATE_LIB)/$(GATE_LIB).lib; \
 		clean; \
-		write_verilog $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
+		write_verilog -noattr -noexpr -nohex -nodec -defparam $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
 	@echo "Synthesis complete .....\n\n"
 	@$(VC) $(CFLAGS) -o $(BUILD)/$(SIM_MAPPED).vvp $@/$(TOP_MODULE).v $(SRC)/$(TB) $(GATE_LIB)/$(GATE_LIB).v
 	@echo "\n\n"
@@ -217,7 +217,7 @@ view: $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES))
 	@echo "----------------------------------------------------------------"
 	@echo "Making Gate Level Schematic ....."
 	@echo "----------------------------------------------------------------\n\n"
-	@$(DC) -d -t -p 'read_verilog -sv $^; hierarchy -check -top $(TOP_MODULE); \
+	@$(DC) -d -p 'read_verilog -sv $^; hierarchy -check -top $(TOP_MODULE); \
 		proc; opt; fsm; opt; memory; opt; techmap; opt; show' > log_mapping.log
 	@echo "Done creating Schematic"	
 

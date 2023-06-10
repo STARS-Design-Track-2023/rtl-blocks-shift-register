@@ -3,7 +3,7 @@
 module tb_shift_reg ();
 
   localparam CLK_PERIOD        = 2.5;
-  localparam PROPAGATION_DELAY = 0.5; // Allow for 500ps for FF propogation delay
+  localparam PROPAGATION_DELAY = 0.8; // Allow for 800ps for FF propogation delay
 
   localparam  SR_SIZE_BITS       = 8;
   localparam  SR_MAX_BIT         = SR_SIZE_BITS - 1;
@@ -60,7 +60,7 @@ module tb_shift_reg ();
     tb_mismatch = 1'b0;
     tb_check    = 1'b1;
     if(tb_expected_ouput == tb_P) begin // Check passed
-      $display("Correct parallel output %s during %s test case", check_tag, tb_test_case);
+      $info("Correct parallel output %s during %s test case", check_tag, tb_test_case);
     end
     else begin // Check failed
       tb_mismatch = 1'b1;

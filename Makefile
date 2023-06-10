@@ -12,7 +12,7 @@
 
 # Specify the name of the top level file (do not include the source folder in the name)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
-TOP_FILE         := 
+TOP_FILE         := shift_reg.sv
 
 # List internal component/block files here (separate the filenames with spaces)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
@@ -53,7 +53,8 @@ CFLAGS           := -g2012 -gspecify -Tmax -v
 DC               := yosys
 
 # Cell libraries
-GATE_LIB         := gscl45nm
+GATE_LIB         := AMI_05
+CELLS            := osu05_stdcells
 
 ##############################################################################
 # RULES
@@ -109,7 +110,7 @@ help:
 all: $(SIM_SOURCE)
 
 # A target that sets up the working directory structure
-dir:
+setup:
 	@mkdir -p ./docs
 	@mkdir -p ./$(MAP)
 	@mkdir -p ./$(BUILD)
@@ -159,13 +160,12 @@ $(MAP): $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 	@touch -c $(TOP).log
 	@$(DC) -d -p 'read_verilog -sv -noblackbox $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES)); \
 		synth -top $(TOP_MODULE); \
-		opt_clean -purge \
-		dfflibmap -liberty $(GATE_LIB)/$(GATE_LIB).lib; \
-		abc -liberty $(GATE_LIB)/$(GATE_LIB).lib; \
+		dfflibmap -liberty $(GATE_LIB)/$(CELLS).lib; \
+		abc -liberty $(GATE_LIB)/$(CELLS).lib; \
 		clean; \
 		write_verilog -noattr -noexpr -nohex -nodec -defparam $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
 	@echo "Synthesis complete .....\n\n"
-	@$(VC) $(CFLAGS) -o $(BUILD)/$(SIM_MAPPED).vvp $@/$(TOP_MODULE).v $(SRC)/$(TB) $(GATE_LIB)/$(GATE_LIB).v
+	@$(VC) $(CFLAGS) -o $(BUILD)/$(SIM_MAPPED).vvp $@/$(TOP_MODULE).v $(SRC)/$(TB) $(GATE_LIB)/$(CELLS).v
 	@echo "\n\n"
 	@echo "Compilation complete\n\n"
 

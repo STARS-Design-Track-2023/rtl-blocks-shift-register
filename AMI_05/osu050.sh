@@ -6,15 +6,15 @@
 
 # The LEF file containing standard cell macros
 
-set leffile=gscl45nm.lef
+set leffile=osu050_stdcells.lef
 
 # The SPICE netlist containing subcell definitions for all the standard cells
 
-set spicefile=gscl45nm.sp
+set spicefile=osu050_stdcells.sp
 
 # The liberty format file containing standard cell timing and function information
 
-set libertyfile=gscl45nm.lib
+set libertyfile=osu05_stdcells.lib
 
 # If there is another LEF file containing technology information
 # that is separate from the file containing standard cell macros,
@@ -35,7 +35,7 @@ set resetpin=R		;# The name of the clear/reset pin on DFFs
 set setpininvert=1	;# Set this to 1 if the set pin is inverted (!set)
 set resetpininvert=1	;# Set this to 1 if the reset pin is inverted (!reset)
 set floppinout=Q	;# Name of the output pin on DFFs
-set floppinin=D		;# Name of the output pin on DFFs
+set floppinin=D		;# Name of the input pin on DFFs
 set floppinclk=CLK	;# Name of the clock pin on DFFs
 
 set bufcell=BUFX2	;# Minimum drive strength buffer cell
@@ -65,19 +65,13 @@ set tiehipin_out=""	;# Output pin name of tiehi cell, if it exists
 set tielo=""		;# Cell to connect to ground, if one exists
 set tielopin_out=""	;# Output pin name of tielo cell, if it exists
 
-set gndnet=gnd		;# Name used for ground pins in standard cells
-set vddnet=vdd		;# Name used for power pins in standard cells
-
 set separator=""		;# Separator between gate names and drive strengths
-set techfile=gscl45nm		;# magic techfile
-set magicrc=gscl45nm.magicrc	;# magic startup script
-set gdsfile=gscl45nm.gds	;# GDS database of standard cells
+set techfile=SCN3ME_SUBM.30	;# magic techfile
+set magicrc=osu050.magicrc	;# magic startup script
+set gdsfile=osu05_stdcells.gds2	;# GDS database of standard cells
 
-set fanout_options="-l 200 -c 50"	;# blifFanout target maximum latency
-					;# per gate 200ps, output load set to 50fF
-
-set base_units="1000"		;# Use nanometer base units instead of centimicrons
-set vesta_options="--summary reports --long"
-set num_layers=6		;# Normally restrict routing to 6 layers
-set addspacers_options="-stripe 1.7 50.0 PG"
-set xspice_options="-io_time=50p -time=10p -idelay=10p -odelay=30p -cload=50f"
+# Option defaults
+set fanout_options="-l 300 -c 75"   ;# blifFanout target maximum latency
+                                    ;# per gate 300ps, output load set to 75fF
+set vesta_options="--long"
+set addspacers_options="-stripe 8 225 PG"

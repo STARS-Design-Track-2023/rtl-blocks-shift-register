@@ -12,7 +12,7 @@
 
 # Specify the name of the top level file (do not include the source folder in the name)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
-TOP_FILE         := shift_reg.sv
+TOP_FILE         := 
 
 # List internal component/block files here (separate the filenames with spaces)
 # NOTE: YOU WILL NEED TO SET THIS VARIABLE'S VALUE WHEN WORKING WITH HEIRARCHICAL DESIGNS
@@ -47,14 +47,15 @@ VC               := iverilog
 # Flags currently described specify the 2012 IEEE verilog standard, require compiler
 # to look into the specify blocks in a cell lib, choose the max timings form the 
 # parameters and print out the compiler verbose.
-CFLAGS           := -g2012 -gspecify -Tmax -v
+CFLAGS           := -g2012 -v
 
 # Design Compiler
 DC               := yosys
 
 # Cell libraries
-GATE_LIB         := AMI_05
-CELLS            := osu05_stdcells
+PDK              := $(PDK_ROOT)
+LIBERTY          := $(PDK)/lib/sky130_fd_sc_hd__tt_100C_1v80.lib
+VERILOG          := $(PDK)/verilog/primitives.v $(PDK)/verilog/sky130_fd_sc_hd.v
 
 ##############################################################################
 # RULES
@@ -76,7 +77,7 @@ help:
 	@echo "Administrative targets:"
 	@echo "  all           - compiles the source version of a full"
 	@echo "                  design including its top level test bench"
-	@echo "  dir           - Creates required directories."
+	@echo "  setup         - Setups the directory for work"
 	@echo "  help          - makefile targets explanation"
 	@echo "  clean         - removes the temporary files"
 	@echo "  print_vars    - prints the contents of the variables"
@@ -114,11 +115,12 @@ setup:
 	@mkdir -p ./docs
 	@mkdir -p ./$(MAP)
 	@mkdir -p ./$(BUILD)
+	@mkdir -p ./$(SRC)
 
 # Removes all non essential files that were made during the building process.
 clean:
 	@echo "Removing temporary files, build files and log files"
-	@rm -rf $(BUILD)/* 
+	@rm -rf $(BUILD)/*
 	@rm -rf $(MAP)/*
 	@rm -f *.log
 	@rm -f *.vcd
@@ -153,19 +155,14 @@ $(SRC): $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 # Define a pattern rule to automatically compile mapped design files for a full mapped design
 $(MAP): $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES) $(TB))
 	@echo "----------------------------------------------------------------"
-	@echo "Synthesizing and Compiling with gscl45nm process ....."
+	@echo "Synthesizing and Compiling with sky130_fd_sc_hd ....."
 	@echo "----------------------------------------------------------------\n\n"
 	@mkdir -p ./$(MAP)
 	@mkdir -p ./$(BUILD)
 	@touch -c $(TOP).log
-	@$(DC) -d -p 'read_verilog -sv -noblackbox $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES)); \
-		synth -top $(TOP_MODULE); \
-		dfflibmap -liberty $(GATE_LIB)/$(CELLS).lib; \
-		abc -liberty $(GATE_LIB)/$(CELLS).lib; \
-		clean; \
-		write_verilog -noattr -noexpr -nohex -nodec -defparam $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
+	@$(DC) -d -p 'read_verilog -sv -noblackbox $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES)); synth -top $(TOP_MODULE); dfflibmap -liberty $(LIBERTY); abc -liberty $(LIBERTY); clean; write_verilog -noattr -noexpr -nohex -nodec -defparam $@/$(TOP_MODULE).v' > $(TOP_MODULE).log
 	@echo "Synthesis complete .....\n\n"
-	@$(VC) $(CFLAGS) -o $(BUILD)/$(SIM_MAPPED).vvp $@/$(TOP_MODULE).v $(SRC)/$(TB) $(GATE_LIB)/$(CELLS).v
+	@$(VC) $(CFLAGS) -o $(BUILD)/$(SIM_MAPPED).vvp -DFUNCTIONAL -DUNIT_DELAY=#1 $@/$(TOP_MODULE).v $(SRC)/$(TB) $(VERILOG)
 	@echo "\n\n"
 	@echo "Compilation complete\n\n"
 
@@ -217,8 +214,7 @@ view: $(addprefix $(SRC)/, $(TOP_FILE) $(COMPONENT_FILES))
 	@echo "----------------------------------------------------------------"
 	@echo "Making Gate Level Schematic ....."
 	@echo "----------------------------------------------------------------\n\n"
-	@$(DC) -d -p 'read_verilog -sv $^; hierarchy -check -top $(TOP_MODULE); \
-		proc; opt; fsm; opt; memory; opt; techmap; opt; show' > log_mapping.log
+	@$(DC) -d -p 'read_verilog -sv $^; hierarchy -check -top $(TOP_MODULE); proc; opt; fsm; opt; memory; opt; show' > log_mapping.log
 	@echo "Done creating Schematic"	
 
 ###########################################################################################

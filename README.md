@@ -1,9 +1,9 @@
 # Shift Register
 
 ## Installation
-To clone the repository go to a safe directory and in the terminal type the following <br> 
+To clone the repository go to a safe directory and in the terminal type the following, replacing `<URL>` with the url of the repository. <br> 
 ```
-git clone https://github.com/STARS-Design-Track-2023/rtl-blocks-shift-register.git
+git clone <URL>
 ```
 
 ## Source Files

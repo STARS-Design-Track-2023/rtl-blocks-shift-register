@@ -31,9 +31,11 @@ This design implements a parallel to parallel or serial to parallel (MSB or LSB)
 1. Clone the repo from github.
 2. Run `make setup` to cofigure directory for the project.
 3. Make an rtl-diagram for the shift register and have the design approved by a TA. Use [draw.io](https://app.diagrams.net/) **Make sure your design is located in the docs directory.**
-4. Code your design in system verilog.
+4. Code your design in SystemVerilog.
 5. Run `make help`/`make` to see the make file targets.
 6. Have both source and mapped versions of your code working.
+7. Have a TA review your source and mapped waveforms.
+
 ## Expected Results
 Use the following signal dump to debug your HDL.
 
